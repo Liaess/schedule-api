@@ -2,10 +2,17 @@ import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
 import ConflictError from "@/errors/conflictError";
 import InvalidDataError from "@/errors/invalidError";
+import UnauthorizedError from "@/errors/unauthorizedError";
 
 export default function errorHandlingMiddleware(err: Error, _req: Request, res: Response, _next: NextFunction) {
   if (err instanceof ConflictError) {
     return res.status(httpStatus.CONFLICT).send({
+      error: err.message,
+    });
+  }
+
+  if (err instanceof UnauthorizedError) {
+    return res.status(httpStatus.UNAUTHORIZED).send({
       error: err.message,
     });
   }

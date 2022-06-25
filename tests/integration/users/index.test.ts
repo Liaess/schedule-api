@@ -83,3 +83,63 @@ describe("POST /users", () => {
     expect(response.status).toBe(httpStatus.CONFLICT);
   });
 });
+
+describe("/POST signIn", () => {
+  it("should respond with status 200, when body is valid", async() => {
+    const password = faker.internet.password(6);
+    const userInsideDB = await createUser(password);
+    const body = {
+      email: userInsideDB.email,
+      password,
+    };
+
+    const response = await server.post("/users/sign-in").send(body);
+    expect(response.status).toBe(httpStatus.OK);
+  });
+
+  it("should respond with status 400, when missing email", async() => {
+    const password = faker.internet.password(6);
+    await createUser(password);
+    const body = {
+      password,
+    };
+
+    const response = await server.post("/users/sign-in").send(body);
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+
+  it("should respond with status 400, when missing password", async() => {
+    const email = faker.internet.email();
+    await createUser(email);
+    const body = {
+      email,
+    };
+
+    const response = await server.post("/users/sign-in").send(body);
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+
+  it("should respond with status 401, when sending invalid password", async() => {
+    const password = faker.internet.password(6);
+    const userInsideDB = await createUser();
+    const body = {
+      email: userInsideDB.email,
+      password,
+    };
+
+    const response = await server.post("/users/sign-in").send(body);
+    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+  });
+
+  it("should respond with status 401, when user not registered", async() => {
+    const email = faker.internet.email();
+    const password = faker.internet.password(6);
+    const body = {
+      email,
+      password,
+    };
+
+    const response = await server.post("/users/sign-in").send(body);
+    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+  });
+});

@@ -4,3 +4,8 @@ export type UserCreateData = {
   password: string;
   confirmPassword?: string;
 };
+
+export type UserLoginData = {
+  email: string;
+  password: string;
+};
