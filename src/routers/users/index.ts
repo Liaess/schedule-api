@@ -5,5 +5,5 @@ import * as usersController from "@/controllers";
 
 export const usersRouter = Router();
 
-usersRouter.post("/sign-up", validateBody(signUpSchema), usersController.createUser);
-usersRouter.post("/sign-in", validateBody(signInSchema), usersController.signIn);
+usersRouter.post("/register", validateBody(signUpSchema), usersController.signUp);
+usersRouter.post("/login", validateBody(signInSchema), usersController.signIn);

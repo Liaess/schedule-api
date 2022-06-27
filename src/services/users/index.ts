@@ -24,17 +24,17 @@ export async function signIn(userData: UserLoginData) {
   const user = await userRepository.checkUserExistanceByEmail(userData.email);
 
   if (!user) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError("Do you have an account? Did you type all the correct data?");
   }
 
   const isValidPassword = await bcrypt.compare(userData.password, user.password);
 
   if (!isValidPassword) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError("Do you have an account? Did you type all the correct data?");
   }
 
   const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string);
   await sessionRepository.createSession(user.id, token);
 
-  return token;
+  return { name: user.name, token };
 }

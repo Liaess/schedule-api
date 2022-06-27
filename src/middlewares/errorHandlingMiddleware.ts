@@ -10,19 +10,19 @@ export default function errorHandlingMiddleware(err: Error, _req: Request, res: 
       error: err.message,
     });
   }
-
+  
   if (err instanceof UnauthorizedError) {
     return res.status(httpStatus.UNAUTHORIZED).send({
       error: err.message,
     });
   }
-
+  
   if (err instanceof InvalidDataError) {
     return res.status(httpStatus.BAD_REQUEST).send({
       error: err.message,
     });
   }
-
+  
   // eslint-disable-next-line no-console
   console.error(err);
   res.status(httpStatus.INTERNAL_SERVER_ERROR).send({

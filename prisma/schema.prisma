@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+
 }
 
 model User {
@@ -17,6 +18,7 @@ model User {
   password String
 
   Session Session[]
+  Event   Event[]
   @@map("users")
 }
 
@@ -27,4 +29,16 @@ model Session {
   User   User   @relation(fields: [userId], references: [id])
 
   @@map("sessions")
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  startDate   DateTime @db.Timestamp()
+  endDate     DateTime @db.Timestamp()
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("events")
 }

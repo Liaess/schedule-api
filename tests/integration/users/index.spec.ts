@@ -4,7 +4,7 @@ import { cleanDB } from "../../helpers";
 import supertest from "supertest";
 import { faker } from "@faker-js/faker";
 import httpStatus from "http-status";
-import { createUser } from "../../factories";
+import { createUser, generateValidbody } from "../../factories";
 
 afterAll(async() => {
   await cleanDB();
@@ -19,56 +19,45 @@ beforeAll(async() => {
 const server = supertest(app);
 
 describe("POST /users", () => {
-  function generateValidbody() {
-    const password = faker.internet.password();
-    const body: { name?: string; email?: string; password?: string; confirmPassword?: string } = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
-      password,
-      confirmPassword: password,
-    };
-    return body;
-  }
-
   it("should respond with status 201, when body is valid", async() => {
     const body = generateValidbody();
 
-    const response = await server.post("/users/sign-up").send(body);
+    const response = await server.post("/users/register").send(body);
     expect(response.status).toBe(httpStatus.CREATED);
   });
 
   it("should respond with status 400, when missing email", async() => {
     const body = generateValidbody();
     delete body.email;
-    const response = await server.post("/users/sign-up").send(body);
+    const response = await server.post("/users/register").send(body);
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
   });
 
   it("should respond with status 400, when missing name", async() => {
     const body = generateValidbody();
     delete body.name;
-    const response = await server.post("/users/sign-up").send(body);
+    const response = await server.post("/users/register").send(body);
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
   });
 
   it("should respond with status 400, when missing password", async() => {
     const body = generateValidbody();
     delete body.password;
-    const response = await server.post("/users/sign-up").send(body);
+    const response = await server.post("/users/register").send(body);
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
   });
 
   it("should respond with status 400, when missing confirmPassword", async() => {
     const body = generateValidbody();
     delete body.confirmPassword;
-    const response = await server.post("/users/sign-up").send(body);
+    const response = await server.post("/users/register").send(body);
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
   });
 
   it("should respond with status 400, when password and confirmPassword don't match", async() => {
     const body = generateValidbody();
     body.confirmPassword = "123456";
-    const response = await server.post("/users/sign-up").send(body);
+    const response = await server.post("/users/register").send(body);
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
   });
 
@@ -79,7 +68,7 @@ describe("POST /users", () => {
       confirmPassword: userInsideDB.password,
     };
 
-    const response = await server.post("/users/sign-up").send(body);
+    const response = await server.post("/users/register").send(body);
     expect(response.status).toBe(httpStatus.CONFLICT);
   });
 });
@@ -93,7 +82,7 @@ describe("/POST signIn", () => {
       password,
     };
 
-    const response = await server.post("/users/sign-in").send(body);
+    const response = await server.post("/users/login").send(body);
     expect(response.status).toBe(httpStatus.OK);
   });
 
@@ -104,7 +93,7 @@ describe("/POST signIn", () => {
       password,
     };
 
-    const response = await server.post("/users/sign-in").send(body);
+    const response = await server.post("/users/login").send(body);
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
   });
 
@@ -115,7 +104,7 @@ describe("/POST signIn", () => {
       email,
     };
 
-    const response = await server.post("/users/sign-in").send(body);
+    const response = await server.post("/users/login").send(body);
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
   });
 
@@ -127,7 +116,7 @@ describe("/POST signIn", () => {
       password,
     };
 
-    const response = await server.post("/users/sign-in").send(body);
+    const response = await server.post("/users/login").send(body);
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
   });
 
@@ -139,7 +128,7 @@ describe("/POST signIn", () => {
       password,
     };
 
-    const response = await server.post("/users/sign-in").send(body);
+    const response = await server.post("/users/login").send(body);
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
   });
 });

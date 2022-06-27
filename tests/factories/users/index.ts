@@ -19,3 +19,14 @@ export async function createUser(params?: string): Promise<Omit<User, "id">> {
 
   return data;
 }
+
+export function generateValidbody() {
+  const password = faker.internet.password();
+  const body: { name?: string; email?: string; password?: string; confirmPassword?: string } = {
+    name: faker.name.firstName(),
+    email: faker.internet.email(),
+    password,
+    confirmPassword: password,
+  };
+  return body;
+}
