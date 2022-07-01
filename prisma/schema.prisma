@@ -32,13 +32,12 @@ model Session {
 }
 
 model Event {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  startDate   DateTime @db.Timestamp()
-  endDate     DateTime @db.Timestamp()
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id])
+  id     Int      @id @default(autoincrement())
+  title  String
+  start  DateTime @db.Timestamp()
+  end    DateTime @db.Timestamp()
+  userId Int
+  user   User     @relation(fields: [userId], references: [id])
 
   @@map("events")
 }

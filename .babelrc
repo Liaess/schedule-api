@@ -8,9 +8,9 @@
     [
       "module-resolver",
       {
-        "root": ["./dist"],
+        "root": ["./dist/src"],
         "alias": {
-          "@": "./dist"
+          "@": "./dist/src"
         }
       }
     ]

@@ -6,7 +6,7 @@ import httpStatus from "http-status";
 import { connectDB, disconnectDB } from "@/config";
 import { usersRouter, eventsRouter } from "@/routers";
 import errorHandlingMiddleware from "@/middlewares/errorHandlingMiddleware";
-import { authenticateToken } from "./middlewares/authenticationMiddleware";
+import { authenticateToken } from "@/middlewares/authenticationMiddleware";
 
 const app = express();
 

@@ -1,2 +1,2 @@
-export * from "./users";
-export * from "./events";
+export * as usersController from "./users";
+export * as eventsController from "./events";

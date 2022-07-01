@@ -1,5 +1,4 @@
-import * as userRepository from "@/repositories";
-import * as sessionRepository from "@/repositories";
+import { sessionRepository, userRepository } from "@/repositories";
 import { UserCreateData, UserLoginData } from "@/constants/users";
 import ConflictError from "@/errors/conflictError";
 import bcrypt from "bcrypt";

@@ -1,6 +1,11 @@
 export type EventCreateData = {
   title: string;
-  description: string;
-  startDate: string;
-  endDate: string;
+  start: string;
+  end: string;
+};
+
+export type EventUpdateData = {
+  title?: string;
+  start?: string;
+  end?: string;
 };

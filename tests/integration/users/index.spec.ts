@@ -4,7 +4,7 @@ import { cleanDB } from "../../helpers";
 import supertest from "supertest";
 import { faker } from "@faker-js/faker";
 import httpStatus from "http-status";
-import { createUser, generateValidbody } from "../../factories";
+import { createUser, findUserByEmail, generateValidbody } from "../../factories";
 
 afterAll(async() => {
   await cleanDB();
@@ -18,12 +18,14 @@ beforeAll(async() => {
 
 const server = supertest(app);
 
-describe("POST /users", () => {
+describe("POST /register", () => {
   it("should respond with status 201, when body is valid", async() => {
     const body = generateValidbody();
 
     const response = await server.post("/users/register").send(body);
+    const user = await findUserByEmail(body.email);
     expect(response.status).toBe(httpStatus.CREATED);
+    expect(user?.email).toBe(body.email);
   });
 
   it("should respond with status 400, when missing email", async() => {
@@ -70,10 +72,11 @@ describe("POST /users", () => {
 
     const response = await server.post("/users/register").send(body);
     expect(response.status).toBe(httpStatus.CONFLICT);
+    expect(JSON.parse(response.text)["error"]).toBe("User already exists!");
   });
 });
 
-describe("/POST signIn", () => {
+describe("/POST login", () => {
   it("should respond with status 200, when body is valid", async() => {
     const password = faker.internet.password(6);
     const userInsideDB = await createUser(password);

@@ -1,18 +1,18 @@
 import { prisma } from "@/config";
+import { EventUpdateData } from "@/constants/events";
 
-export async function checkEventAvailability(userId: number, convertedStartDate: Date, convertedEndDate: Date) {
+export async function checkEventAvailability(userId: number, convertedStart: Date, convertedEnd: Date, id?: number) {
   return await prisma.event.findMany({
     where: {
-      userId,
       AND: [
         {
-          startDate: {
-            gte: new Date(convertedStartDate),
+          start: {
+            gte: new Date(convertedStart),
           },
         },
         {
-          endDate: {
-            lte: new Date(convertedEndDate),
+          end: {
+            lte: new Date(convertedEnd),
           },
         },
         {
@@ -21,24 +21,53 @@ export async function checkEventAvailability(userId: number, convertedStartDate:
           },
         },
       ],
+      NOT: {
+        id: id && id,
+      },
     },
   });
 }
 
-export async function createEvent(
-  title: string,
-  description: string,
-  convertedStartDate: Date,
-  convertedEndDate: Date,
-  userId: number,
-) {
+export async function createEvent(title: string, convertedStart: Date, convertedEnd: Date, userId: number) {
   await prisma.event.create({
     data: {
       title,
-      description,
-      startDate: convertedStartDate,
-      endDate: convertedEndDate,
+      start: convertedStart,
+      end: convertedEnd,
       userId,
     },
+  });
+}
+
+export async function getEvents(userId: number) {
+  return await prisma.event.findMany({
+    where: {
+      userId,
+    },
+  });
+}
+
+export async function getEventById(id: number) {
+  return await prisma.event.findUnique({
+    where: {
+      id,
+    },
+  });
+}
+
+export async function deleteEvent(id: number) {
+  await prisma.event.delete({
+    where: {
+      id,
+    },
+  });
+}
+
+export async function updateEvent(id: number, eventData: EventUpdateData) {
+  await prisma.event.update({
+    where: {
+      id,
+    },
+    data: eventData,
   });
 }

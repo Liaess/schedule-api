@@ -30,3 +30,13 @@ export function generateValidbody() {
   };
   return body;
 }
+
+export async function findUserByEmail(email: string | undefined): Promise<User | null> {
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  return user;
+}
