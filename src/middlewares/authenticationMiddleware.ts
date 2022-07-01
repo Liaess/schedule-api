@@ -20,6 +20,7 @@ export async function authenticateToken(req: Request, res: Response, _next: Next
 
     const { id: userId } = jwt.verify(token, process.env.JWT_SECRET as string) as JWTPayload;
     res.locals.userId = userId;
+    res.locals.token = token;
   } catch (error) {
     throw new UnauthorizedError("You must be logged in to continue!");
   }

@@ -21,7 +21,7 @@ export async function updateEvent(req: Request, res: Response) {
   const eventData: EventUpdateData = req.body;
   const userId = res.locals.userId;
   await eventsService.updateEvent(Number(id), eventData, userId);
-  // res.sendStatus(httpStatus.OK);
+  res.sendStatus(httpStatus.OK);
 }
 
 export async function deleteEvent(req: Request, res: Response) {

@@ -37,3 +37,7 @@ export async function signIn(userData: UserLoginData) {
 
   return { name: user.name, token };
 }
+
+export async function logout(userId: string, token: string) {
+  await sessionRepository.deleteSession(Number(userId), token);
+}
