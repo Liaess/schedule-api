@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 import ConflictError from "@/errors/conflictError";
 import InvalidDataError from "@/errors/invalidError";
 import UnauthorizedError from "@/errors/unauthorizedError";
+import NotFound from "@/errors/notFoundError";
 
 export default function errorHandlingMiddleware(err: Error, _req: Request, res: Response, _next: NextFunction) {
   if (err instanceof ConflictError) {
@@ -17,6 +18,12 @@ export default function errorHandlingMiddleware(err: Error, _req: Request, res: 
     });
   }
   
+  if (err instanceof NotFound) {
+    return res.status(httpStatus.NOT_FOUND).send({
+      error: err.message,
+    });
+  }
+
   if (err instanceof InvalidDataError) {
     return res.status(httpStatus.BAD_REQUEST).send({
       error: err.message,

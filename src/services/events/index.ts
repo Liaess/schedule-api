@@ -1,5 +1,6 @@
 import { EventCreateData, EventUpdateData } from "@/constants/events";
 import ConflictError from "@/errors/conflictError";
+import NotFound from "@/errors/notFoundError";
 import UnauthorizedError from "@/errors/unauthorizedError";
 import { eventsRepository } from "@/repositories";
 import dayjs from "dayjs";
@@ -86,7 +87,7 @@ export async function updateEvent(id: number, eventData: EventUpdateData, userId
 export async function deleteEvent(id: number, userId: number) {
   const eventInfo = await eventsRepository.getEventById(id);
 
-  if (!eventInfo) throw new UnauthorizedError("Event does not exist");
+  if (!eventInfo) throw new NotFound("Event does not exist");
   if (eventInfo.userId !== userId) throw new UnauthorizedError("You are not authorized to delete this event");
 
   await eventsRepository.deleteEvent(id);

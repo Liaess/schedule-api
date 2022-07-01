@@ -3,12 +3,12 @@ import app, { init } from "@/app";
 import { prisma } from "@/config";
 import httpStatus from "http-status";
 
-afterAll(async() => {
-  await prisma.$disconnect();
-});
-
 beforeAll(async() => {
   await init();
+});
+
+afterAll(async() => {
+  await prisma.$disconnect();
 });
 
 const server = supertest(app);

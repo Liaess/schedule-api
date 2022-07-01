@@ -13,7 +13,7 @@ const app = express();
 app
   .use(cors())
   .use(json())
-  .get("/health", (_req, res) => res.send(httpStatus.OK))
+  .get("/health", (_req, res) => res.sendStatus(httpStatus.OK))
   .use("/users", usersRouter)
   .use("/events", authenticateToken, eventsRouter)
   .use(errorHandlingMiddleware);

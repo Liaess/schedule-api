@@ -3,7 +3,14 @@ import { faker } from "@faker-js/faker";
 import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 
-export async function createUser(params?: string): Promise<Omit<User, "id">> {
+type CreateUserFactory = {
+  id: number;
+  email: string;
+  name: string;
+  password: string;
+};
+
+export async function createUser(params?: string) {
   const incomingPassword: string = params || faker.internet.password(6);
   const password = await bcrypt.hash(incomingPassword, 12);
 
@@ -13,14 +20,16 @@ export async function createUser(params?: string): Promise<Omit<User, "id">> {
     password,
   };
 
-  await prisma.user.create({
-    data,
+  return await prisma.user.create({
+    data: {
+      email: data.email,
+      name: data.name,
+      password: data.password,
+    },
   });
-
-  return data;
 }
 
-export function generateValidbody() {
+export function generateValidUserBody() {
   const password = faker.internet.password();
   const body: { name?: string; email?: string; password?: string; confirmPassword?: string } = {
     name: faker.name.firstName(),
