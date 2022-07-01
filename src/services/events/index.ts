@@ -9,6 +9,10 @@ export async function createEvent({ title, start, end }: EventCreateData, userId
   const convertedEnd = new Date(end);
   const currentDate = new Date();
 
+  if (convertedStart.toUTCString() === convertedEnd.toUTCString()) {
+    throw new ConflictError("Start and end date cannot be the same!");
+  }
+
   if (dayjs(convertedEnd).isBefore(convertedStart, "hours")) {
     throw new ConflictError("Event cannot be in the past!");
   }
@@ -55,7 +59,7 @@ export async function updateEvent(id: number, eventData: EventUpdateData, userId
       throw new ConflictError("Event must be in the future!");
     }
   }
-  
+
   if (eventData.end) {
     const convertedEnd = new Date(eventData.end);
     const currentDate = new Date();
