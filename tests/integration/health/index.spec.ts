@@ -1,17 +1,17 @@
 import supertest from "supertest";
-import app, { init } from "@/app";
 import { prisma } from "@/config";
 import httpStatus from "http-status";
+import { initServer } from "../../helpers";
+
+let server: supertest.SuperTest<supertest.Test>;
 
 beforeAll(async() => {
-  await init();
+  server = await initServer();
 });
 
 afterAll(async() => {
   await prisma.$disconnect();
 });
-
-const server = supertest(app);
 
 describe("GET /health", () => {
   it("should respond with status 200 with OK! text", async() => {

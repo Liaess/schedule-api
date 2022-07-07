@@ -1,13 +1,14 @@
-import app, { init } from "@/app";
 import { prisma } from "@/config";
-import { cleanDB, generateValidToken } from "../../helpers";
+import { cleanDB, generateValidToken, initServer } from "../../helpers";
 import supertest from "supertest";
 import httpStatus from "http-status";
 import { createUser, generateValidEventBody, populateEvents } from "../../factories";
 import dayjs from "dayjs";
 
+let server: supertest.SuperTest<supertest.Test>;
+
 beforeAll(async() => {
-  await init();
+  server = await initServer();
 });
 
 beforeEach(async() => {
@@ -17,8 +18,6 @@ beforeEach(async() => {
 afterAll(async() => {
   await prisma.$disconnect();
 });
-
-const server = supertest(app);
 
 describe("POST /events/register", () => {
   it("it should return status 201, when sucessfully create an event", async() => {
