@@ -1,2 +1,2 @@
-export * as userService from "./users";
-export * as eventsService from "./events";
+export * from "./users";
+export * from "./events";

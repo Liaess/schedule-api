@@ -2,14 +2,13 @@ import "@/config";
 import "express-async-errors";
 import express, { Express, json } from "express";
 import cors from "cors";
-import httpStatus from "http-status";
 import { connectDB, disconnectDB } from "@/config";
-import { usersRouter, eventsRouter } from "@/routers";
 import errorHandlingMiddleware from "@/middlewares/errorHandlingMiddleware";
-import { authenticateToken } from "@/middlewares/authenticationMiddleware";
+import { routers } from "@/routers";
 
 export class App {
   public server;
+
   constructor() {
     this.server = express();
     this.middlewares();
@@ -22,11 +21,7 @@ export class App {
   }
 
   private routes() {
-    this.server
-      .use("/health", (_req, res) => res.sendStatus(httpStatus.OK))
-      .use("/users", usersRouter)
-      .use("/events", authenticateToken, eventsRouter)
-      .use(errorHandlingMiddleware);
+    this.server.use(routers).use(errorHandlingMiddleware);
   }
 
   public async init(): Promise<Express> {

@@ -1,73 +1,75 @@
 import { prisma } from "@/config";
 import { EventUpdateData } from "@/constants/events";
 
-export async function checkEventAvailability(userId: number, convertedStart: Date, convertedEnd: Date, id?: number) {
-  return await prisma.event.findMany({
-    where: {
-      AND: [
-        {
-          start: {
-            gte: new Date(convertedStart),
+export class EventsRepository {
+  async checkEventAvailability(userId: number, convertedStart: Date, convertedEnd: Date, id?: number) {
+    return await prisma.event.findMany({
+      where: {
+        AND: [
+          {
+            start: {
+              gte: new Date(convertedStart),
+            },
           },
-        },
-        {
-          end: {
-            lte: new Date(convertedEnd),
+          {
+            end: {
+              lte: new Date(convertedEnd),
+            },
           },
-        },
-        {
-          userId: {
-            equals: userId,
+          {
+            userId: {
+              equals: userId,
+            },
           },
+        ],
+        NOT: {
+          id: id && id,
         },
-      ],
-      NOT: {
-        id: id && id,
       },
-    },
-  });
-}
+    });
+  }
 
-export async function createEvent(title: string, convertedStart: Date, convertedEnd: Date, userId: number) {
-  await prisma.event.create({
-    data: {
-      title,
-      start: convertedStart,
-      end: convertedEnd,
-      userId,
-    },
-  });
-}
+  async createEvent(title: string, convertedStart: Date, convertedEnd: Date, userId: number) {
+    await prisma.event.create({
+      data: {
+        title,
+        start: convertedStart,
+        end: convertedEnd,
+        userId,
+      },
+    });
+  }
 
-export async function getEvents(userId: number) {
-  return await prisma.event.findMany({
-    where: {
-      userId,
-    },
-  });
-}
+  async getEvents(userId: number) {
+    return await prisma.event.findMany({
+      where: {
+        userId,
+      },
+    });
+  }
 
-export async function getEventById(id: number) {
-  return await prisma.event.findUnique({
-    where: {
-      id,
-    },
-  });
-}
+  async getEventById(id: number) {
+    return await prisma.event.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
 
-export async function deleteEvent(id: number) {
-  await prisma.event.delete({
-    where: {
-      id,
-    },
-  });
-}
+  async deleteEvent(id: number) {
+    await prisma.event.delete({
+      where: {
+        id,
+      },
+    });
+  }
 
-export async function updateEvent(id: number, eventData: EventUpdateData) {
-  await prisma.event.update({
-    where: {
-      id,
-    },
-    data: eventData,
-  });
+  async updateEvent(id: number, eventData: EventUpdateData) {
+    await prisma.event.update({
+      where: {
+        id,
+      },
+      data: eventData,
+    });
+  }
 }
