@@ -1,25 +1,25 @@
 version: '3.4'
 services:
-  schedule:
-    container_name: schedule
+  schedule-test:
+    container_name: schedule-test
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.test
       context: .
-      target: development
+      target: tests
     volumes:
       - .:/usr/src/schedule
       - ./usr/src/schedule/node_modules
     env_file:
-      - .env
+      - .env.test
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@schedule-postgres:${POSTGRES_PORT}/${POSTGRES_DATABASE}
+      DATABASE_URL: postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@schedule-postgres-test:${POSTGRES_PORT}/${POSTGRES_DATABASE}
     ports:
       - ${PORT}:${PORT}
     depends_on:
-      - schedule-postgres
-    command: bash -c "npx prisma migrate dev && npm run dev"
-  schedule-postgres:
-    container_name: schedule-postgres
+      - schedule-postgres-test
+    command: bash -c "npx prisma migrate dev && npm run test"
+  schedule-postgres-test:
+    container_name: schedule-postgres-test
     image: postgres
     restart: always
     environment:
@@ -29,8 +29,8 @@ services:
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
-      - schedule-postgres-data:/var/lib/postgresql/data
+      - schedule-postgres-test-data:/var/lib/postgresql/data
     command: postgres -p ${POSTGRES_PORT}
 
 volumes:
-  schedule-postgres-data:
+  schedule-postgres-test-data:
