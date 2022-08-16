@@ -2,6 +2,13 @@ import { prisma } from "@/config";
 import { User } from "@prisma/client";
 import { createSession, createUser } from "./factories";
 import jwt from "jsonwebtoken";
+import supertest from "supertest";
+import { App } from "@/config";
+
+export async function initServer() {
+  const app = await new App().init();
+  return supertest(app);
+}
 
 export async function cleanDB() {
   await prisma.$executeRaw`TRUNCATE TABLE users RESTART IDENTITY CASCADE;`;
