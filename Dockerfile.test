@@ -1,0 +1,6 @@
+FROM node:16.15 As tests
+WORKDIR /usr/src/schedule
+COPY ./package*.json ./
+RUN npm ci
+COPY . .
+RUN npx prisma generate
