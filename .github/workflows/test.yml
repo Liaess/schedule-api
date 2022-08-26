@@ -1,14 +1,16 @@
 name: Test
 on:
-  pull_resquest:
+  pull_request:
+    branches:
+     - main
 env:
-  POSTGRES_USERNAME=postgres
-  POSTGRES_PASSWORD=top_secret
-  POSTGRES_PORT=5432
-  POSTGRES_DATABASE=schedule_test
-  DATABASE_URL=postgresql://postgres:top_secret@schedule-postgres-test:5433/schedule_test
-  PORT=6379
-  JWT_SECRET=top_secret
+  POSTGRES_USERNAME: postgres
+  POSTGRES_PASSWORD: top_secret
+  POSTGRES_PORT: 5433
+  POSTGRES_DATABASE: schedule_test
+  DATABASE_URL: postgresql://postgres:top_secret@schedule-postgres-test:5433/schedule_test
+  PORT: 6379
+  JWT_SECRET: top_secret
 jobs:
   test:
     runs-on: ubuntu-20.04
@@ -16,8 +18,11 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
-      steps:
-        -uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v2
         
-        -name: Build
+      - name: Build
         run: npm run ci:build
+
+      - name: Test
+        run: npm run ci:test
