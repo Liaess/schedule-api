@@ -19,7 +19,7 @@ jobs:
       matrix:
         node-version: [16.x]
       steps:
-        -uses: actions/checkout@v2
+        - uses: actions/checkout@v2
         
-        -name: Build
-        run: npm run ci:build
+        - name: Build
+          run: npm run ci:build
