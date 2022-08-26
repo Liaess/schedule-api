@@ -4,13 +4,13 @@ on:
     branches:
      - main
 env:
-  POSTGRES_USERNAME=postgres
-  POSTGRES_PASSWORD=top_secret
-  POSTGRES_PORT=5432
-  POSTGRES_DATABASE=schedule_test
-  DATABASE_URL=postgresql://postgres:top_secret@schedule-postgres-test:5433/schedule_test
-  PORT=6379
-  JWT_SECRET=top_secret
+  POSTGRES_USERNAME: postgres
+  POSTGRES_PASSWORD: top_secret
+  POSTGRES_PORT: 5432
+  POSTGRES_DATABASE: schedule_test
+  DATABASE_URL: postgresql://postgres:top_secret@schedule-postgres-test:5433/schedule_test
+  PORT: 6379
+  JWT_SECRET: top_secret
 jobs:
   test:
     runs-on: ubuntu-20.04
