@@ -6,7 +6,7 @@ on:
 env:
   POSTGRES_USERNAME: postgres
   POSTGRES_PASSWORD: top_secret
-  POSTGRES_PORT: 5432
+  POSTGRES_PORT: 5433
   POSTGRES_DATABASE: schedule_test
   DATABASE_URL: postgresql://postgres:top_secret@schedule-postgres-test:5433/schedule_test
   PORT: 6379

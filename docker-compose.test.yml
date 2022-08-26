@@ -9,9 +9,10 @@ services:
     volumes:
       - .:/usr/src/schedule
       - ./usr/src/schedule/node_modules
-    env_file:
-      - .env.test
     environment:
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
       DATABASE_URL: postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@schedule-postgres-test:${POSTGRES_PORT}/${POSTGRES_DATABASE}
     ports:
       - ${PORT}:${PORT}
