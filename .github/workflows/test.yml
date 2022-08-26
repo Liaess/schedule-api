@@ -1,6 +1,8 @@
 name: Test
 on:
   pull_resquest:
+    branches:
+     - main
 env:
   POSTGRES_USERNAME=postgres
   POSTGRES_PASSWORD=top_secret
