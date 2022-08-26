@@ -1,6 +1,6 @@
 name: Test
 on:
-  pull_resquest:
+  pull_request:
     branches:
      - main
 env:
