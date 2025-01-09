@@ -1,8 +1,8 @@
 app/install:
-	yarn
+	npm run install
 
 app/build:
-	yarn build
+	npm run build
 
 docker/up: docker/down
 	docker compose up -d
@@ -11,7 +11,10 @@ docker/down:
 	docker compose down
 
 app/start: app/build docker/up
-	yarn start
+	npm run start
 
-app/dev: app/build docker/up
-	yarn start:dev
+app/migration-run:
+	npm run migration:run
+
+app/dev: docker/up app/migration-run
+	npm run start:dev
