@@ -10,11 +10,11 @@ docker/up: docker/down
 docker/down:
 	docker compose down
 
-app/start: app/build docker/up
-	npm run start
-
 app/migration-run:
 	npm run migration:run
+
+app/start: docker/up app/migration-run
+	npm run start
 
 app/dev: docker/up app/migration-run
 	npm run start:dev

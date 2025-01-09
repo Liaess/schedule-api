@@ -1,11 +1,16 @@
-import { CreateUserDTO } from '@/src/users/dto';
-import { User } from '@/src/users/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateUserDTO } from '@users/dto';
+import { User } from '@users/entity/user.entity';
 import { Repository } from 'typeorm';
 
 export class UsersRepository {
   constructor(@InjectRepository(User) private repository: Repository<User>) {}
-  async create(data: CreateUserDTO): Promise<User> {
-    return this.repository.save(data);
+
+  async findOneByEmail(email: string): Promise<User> {
+    return this.repository.findOne({ where: { email } });
+  }
+
+  async create(data: CreateUserDTO): Promise<void> {
+    await this.repository.insert(data);
   }
 }

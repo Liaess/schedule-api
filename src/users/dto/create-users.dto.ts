@@ -1,20 +1,31 @@
-import { IsString, IsEmail, Equals, MinLength } from 'class-validator';
+import { getConstant } from '@/constants/get-constant';
+import { Match } from '@/libs/class-validator';
+import { IsString, IsEmail, MinLength } from 'class-validator';
 
 export class CreateUserDTO {
-  @IsString()
+  @IsString({
+    message: getConstant().USER.NAME_MUST_BE_STRING,
+  })
   name: string;
 
-  @IsEmail()
+  @IsEmail(
+    {},
+    {
+      message: getConstant().USER.EMAIL_MUST_BE_VALID,
+    },
+  )
   email: string;
 
-  @IsString()
+  @IsString({
+    message: getConstant().USER.PASSWORD_MUST_BE_STRING,
+  })
   @MinLength(6, {
-    message: 'Password must be at least 6 characters',
+    message: getConstant().USER.PASSWORD_MIN_LENGTH,
   })
   password: string;
 
-  @Equals('password', {
-    message: 'Password and Confirm Password must match',
+  @Match(CreateUserDTO, (o) => o.password, {
+    message: getConstant().USER.CONFIRM_PASSWORD_MUST_MATCH,
   })
   confirmPassword: string;
 }
