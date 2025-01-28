@@ -18,9 +18,9 @@ jest.mock('./pt_BR/users', () => ({
 
 describe('getConstant', () => {
   describe('English tests', () => {
-    it('should return "portuguese summary" when the key is HELLO_WORLD_SUMMARY and the lang is not passed', () => {
+    it('should return "english summary" when the key is HELLO_WORLD_SUMMARY and the lang is not passed', () => {
       expect(getConstant().USER.NAME_MUST_BE_STRING).toBe(
-        'Nome deve ser uma string',
+        'Name must be a string',
       );
     });
 
@@ -40,10 +40,10 @@ describe('getConstant', () => {
   });
 
   describe('when getConstant has been called and getLanguage return LANG_DOCS', () => {
-    it('then language should be set to LANGUAGES.PT_BR', () => {
+    it('then language should be set to LANGUAGES.EN_US', () => {
       jest.spyOn(lang, 'getLanguage').mockReturnValue(LANG_DOCS);
       expect(getConstant(LANGUAGES.EN_US).USER.NAME_MUST_BE_STRING).toBe(
-        'Nome deve ser uma string',
+        'Name must be a string',
       );
     });
   });

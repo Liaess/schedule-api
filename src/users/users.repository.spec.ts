@@ -4,8 +4,9 @@ import { User } from '@users/entity/user.entity';
 import { CREATE_USER_MOCK, USER_MOCK } from '@users/mocks';
 import { UsersRepository } from '@users/users.repository';
 
-const mockRepositoryInsert = jest.fn();
+const mockRepositorySave = jest.fn();
 const mockRepositoryFindOne = jest.fn();
+const mockRepositoryUpdate = jest.fn();
 
 describe('UsersRepository', () => {
   let repository: UsersRepository;
@@ -18,7 +19,8 @@ describe('UsersRepository', () => {
           provide: getRepositoryToken(User),
           useValue: {
             findOne: mockRepositoryFindOne,
-            insert: mockRepositoryInsert,
+            save: mockRepositorySave,
+            update: mockRepositoryUpdate,
           },
         },
       ],
@@ -48,7 +50,28 @@ describe('UsersRepository', () => {
     it('should create a user', async () => {
       await repository.create(CREATE_USER_MOCK);
 
-      expect(mockRepositoryInsert).toHaveBeenCalledWith(CREATE_USER_MOCK);
+      expect(mockRepositorySave).toHaveBeenCalledWith(CREATE_USER_MOCK);
+    });
+  });
+
+  describe('findOneByActivationCode', () => {
+    it('should return a user', async () => {
+      mockRepositoryFindOne.mockResolvedValue(USER_MOCK);
+      const user = await repository.findOneByActivationCode(
+        USER_MOCK.activation_code,
+      );
+
+      expect(user).toEqual(USER_MOCK);
+    });
+  });
+
+  describe('activateUser', () => {
+    it('should activate a user', async () => {
+      await repository.activateUser(USER_MOCK.id);
+
+      expect(mockRepositoryUpdate).toHaveBeenCalledWith(USER_MOCK.id, {
+        isActive: true,
+      });
     });
   });
 });

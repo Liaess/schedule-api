@@ -21,8 +21,10 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "paths": {
+      "@auth/*": ["src/auth/*"],
       "@constants/*": ["src/constants/*"],
       "@users/*": ["src/users/*"],
+      "@mail/*": ["src/mail/*"],
       "@config/*": ["src/config/*"],
       "@/*": ["src/*"]
     }

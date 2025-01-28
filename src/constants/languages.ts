@@ -10,4 +10,4 @@ export const isLangAllowed = (lang: LANGUAGES) => ALLOWED_LANGS.includes(lang);
 export const getLanguage = (lang: LANGUAGES) =>
   isLangAllowed(lang) ? lang : LANG_DOCS;
 
-export const LANG_DOCS = LANGUAGES.PT_BR;
+export const LANG_DOCS = LANGUAGES.EN_US;

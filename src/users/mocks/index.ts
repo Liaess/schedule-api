@@ -12,10 +12,14 @@ export const CREATE_USER_MOCK: CreateUserDTO = {
 };
 
 export const USER_MOCK: User = {
-  id: faker.number.int(),
+  id: faker.string.uuid(),
   email: faker.internet.email(),
   password: PASSWORD_MOCK,
   name: faker.person.firstName(),
   isActive: true,
+  activation_code: faker.string.uuid(),
   created_at: new Date(),
+  updated_at: new Date(),
 };
+
+export const REDIRECT_URL_MOCK = faker.internet.url();

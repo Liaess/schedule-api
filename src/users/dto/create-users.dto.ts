@@ -1,10 +1,13 @@
 import { getConstant } from '@/constants/get-constant';
 import { Match } from '@/libs/class-validator';
-import { IsString, IsEmail, MinLength } from 'class-validator';
+import { IsString, IsEmail, MinLength, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDTO {
   @IsString({
     message: getConstant().USER.NAME_MUST_BE_STRING,
+  })
+  @IsNotEmpty({
+    message: getConstant().USER.NAME_MUST_BE_PROVIDED,
   })
   name: string;
 
