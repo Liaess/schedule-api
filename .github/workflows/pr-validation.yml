@@ -1,0 +1,31 @@
+name: PR Validation
+on: [pull_request]
+
+jobs:
+  check-build-status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install packages
+        run: yarn install
+
+      - name: Run lint
+        run: yarn lint
+
+      - name: Run test and coverage validation
+        env:
+          NODE_OPTIONS: '--max_old_space_size=4096'
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          skip-step: install
+          package-manager: yarn
+          test-script: yarn test:cov
