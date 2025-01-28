@@ -3,6 +3,7 @@
 This PR...
 
 ## Demonstration
+
 <!-- If possible add screen prints or payloads as evidence to show the code working -->
 
 ## Checklist:
@@ -12,7 +13,7 @@ This PR...
 - [ ] I have performed a self-review of my own code
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] I have run the `yarn test` and new and existing unit tests pass locally with my changes
+- [ ] I have run the `npm run test` and new and existing unit tests pass locally with my changes
 - [ ] I've updated my branch from origin branch
 - [ ] I've updated the README.md with details of changes to the interface, this includes new environment variables, exposed ports, useful file locations and container parameters
 
