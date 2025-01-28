@@ -16,10 +16,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install packages
-        run: yarn install
+        run: npm install
 
       - name: Run lint
-        run: yarn lint
+        run: npm run lint
 
       - name: Run test and coverage validation
         env:
@@ -27,5 +27,5 @@ jobs:
         uses: ArtiomTr/jest-coverage-report-action@v2
         with:
           skip-step: install
-          package-manager: yarn
-          test-script: yarn test:cov
+          package-manager: npm
+          test-script: npm run test:cov
