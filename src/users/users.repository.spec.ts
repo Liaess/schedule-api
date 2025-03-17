@@ -1,8 +1,8 @@
+import { User } from '@/users/entity/user.entity';
+import { CREATE_USER_MOCK, USER_MOCK } from '@/users/mocks';
+import { UsersRepository } from '@/users/users.repository';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '@users/entity/user.entity';
-import { CREATE_USER_MOCK, USER_MOCK } from '@users/mocks';
-import { UsersRepository } from '@users/users.repository';
 
 const mockRepositorySave = jest.fn();
 const mockRepositoryFindOne = jest.fn();
@@ -50,7 +50,10 @@ describe('UsersRepository', () => {
     it('should create a user', async () => {
       await repository.create(CREATE_USER_MOCK);
 
-      expect(mockRepositorySave).toHaveBeenCalledWith(CREATE_USER_MOCK);
+      expect(mockRepositorySave).toHaveBeenCalledWith({
+        ...CREATE_USER_MOCK,
+        is_active: true,
+      });
     });
   });
 
@@ -70,7 +73,7 @@ describe('UsersRepository', () => {
       await repository.activateUser(USER_MOCK.id);
 
       expect(mockRepositoryUpdate).toHaveBeenCalledWith(USER_MOCK.id, {
-        isActive: true,
+        is_active: true,
       });
     });
   });

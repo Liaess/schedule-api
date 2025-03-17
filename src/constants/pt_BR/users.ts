@@ -9,4 +9,6 @@ export const USER = {
   CONFIRM_PASSWORD_MUST_MATCH: 'Senha e confirmação de senha devem ser iguais',
   USER_CREATED_SUCCESSFULLY: 'Usuário criado com sucesso',
   EMAIL_CONFIRMED_SUCCESSFULLY: 'Email confirmado com sucesso',
+  USER_INFORMATION_NOT_MATCH: 'Informações do usuário não correspondem',
+  USER_IS_NOT_ACTIVE: 'Usuário não está ativo',
 };

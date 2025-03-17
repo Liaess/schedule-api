@@ -1,9 +1,11 @@
+import { Event } from '@/events/entities/event.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   Generated,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('users')
@@ -22,8 +24,8 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ default: true })
-  isActive: boolean;
+  @Column({ default: false })
+  is_active: boolean;
 
   @Column()
   @Generated('uuid')
@@ -34,4 +36,7 @@ export class User {
 
   @CreateDateColumn({ type: 'timestamp' })
   updated_at: Date;
+
+  @OneToMany(() => Event, (event) => event.user)
+  event: Event[];
 }

@@ -36,13 +36,9 @@ module.exports = {
     '!**/exceptions/*.(t|j)s',
     '!**/migrations/*.(t|j)s',
     '!**/config/*.(t|j)s',
+    '!**/shared/params/*.(t|j)s',
   ],
   moduleNameMapper: {
-    '^@auth/(.*)$': '<rootDir>/auth/$1',
-    '^@mail/(.*)$': '<rootDir>/mail/$1',
-    '^@config/(.*)$': '<rootDir>/config/$1',
-    '^@constants/(.*)$': '<rootDir>/constants/$1',
-    '^@users/(.*)$': '<rootDir>/users/$1',
-    '^@/(.*)': '<rootDir>/$1',
+    '^@/(.*)$': '<rootDir>/$1',
   },
 };

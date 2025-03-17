@@ -1,39 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDTO } from '@users/dto';
 import {
   UserAlreadyExistsException,
   UserNotFoundException,
 } from './exceptions';
-import { UsersRepository } from '@users/users.repository';
-import { MailService } from '@mail/mail.service';
-import {
-  generateSignupContent,
-  generateSignupSubject,
-  signUpRedirectUrl,
-} from '@users/constants';
+import { HashingService } from '@/libs/hashing';
+import { UsersRepository } from '@/users/users.repository';
+import { CreateUserRequestDTO } from '@/users/dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
-    private mailService: MailService,
+    private readonly hashingService: HashingService,
   ) {}
 
-  async create(data: CreateUserDTO) {
+  async create(data: CreateUserRequestDTO) {
     const isUserExists = await this.usersRepository.findOneByEmail(data.email);
 
     if (isUserExists) throw new UserAlreadyExistsException();
 
-    const user = await this.usersRepository.create(data);
+    data.password = await this.hashingService.hash(data.password);
 
-    await this.mailService.send({
-      to: data.email,
-      html: generateSignupContent(
-        data.email,
-        signUpRedirectUrl(user.activation_code),
-      ),
-      subject: generateSignupSubject(),
-    });
+    await this.usersRepository.create(data);
   }
 
   async confirmEmail(confirmCode: string) {

@@ -9,4 +9,6 @@ export const USER = {
   CONFIRM_PASSWORD_MUST_MATCH: 'Password and confirm password must match',
   USER_CREATED_SUCCESSFULLY: 'User created successfully',
   EMAIL_CONFIRMED_SUCCESSFULLY: 'Email confirmed successfully',
+  USER_INFORMATION_NOT_MATCH: 'User information not match',
+  USER_IS_NOT_ACTIVE: 'User is not active',
 };

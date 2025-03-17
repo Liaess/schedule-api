@@ -1,25 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
-import { UsersRepository } from '@users/users.repository';
-import { CREATE_USER_MOCK, USER_MOCK } from '@users/mocks';
-import { MailService } from '@mail/mail.service';
-
-const mockConfigIsProd = jest.fn(() => false);
-jest.mock('@config/index', () => ({
-  isProd: () => mockConfigIsProd(),
-}));
-
-jest.mock('@users/constants', () => ({
-  generateSignupContent: jest.fn(),
-  generateSignupSubject: jest.fn(),
-  signUpRedirectUrl: jest.fn(),
-}));
+import { HashingService } from '@/libs/hashing';
+import { UsersRepository } from '@/users/users.repository';
+import { CREATE_USER_MOCK, PASSWORD_MOCK, USER_MOCK } from '@/users/mocks';
+import {
+  UserAlreadyExistsException,
+  UserNotFoundException,
+} from '@/users/exceptions';
 
 const mockUserRepositoryFindOneByEmail = jest.fn();
 const mockUserRepositoryFindOneByActivationCode = jest.fn();
 const mockUserRepositoryCreate = jest.fn();
 const mockUserRepositoryActivateUser = jest.fn();
-const mockSend = jest.fn();
+
+const mockHashingServiceHash = jest.fn();
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -38,9 +32,9 @@ describe('UsersService', () => {
           },
         },
         {
-          provide: MailService,
+          provide: HashingService,
           useValue: {
-            send: mockSend,
+            hash: mockHashingServiceHash,
           },
         },
       ],
@@ -58,23 +52,30 @@ describe('UsersService', () => {
   });
 
   describe('create', () => {
-    it('should throw an error if user already exists', async () => {
-      mockUserRepositoryFindOneByEmail.mockResolvedValue(USER_MOCK);
-
-      await expect(service.create(CREATE_USER_MOCK)).rejects.toThrow();
-      expect(mockUserRepositoryFindOneByEmail).toHaveBeenCalledTimes(1);
-      expect(mockUserRepositoryCreate).toHaveBeenCalledTimes(0);
-      expect(mockSend).toHaveBeenCalledTimes(0);
-    });
-
     it('should create a new user', async () => {
+      mockHashingServiceHash.mockResolvedValue(PASSWORD_MOCK);
       mockUserRepositoryFindOneByEmail.mockResolvedValue(null);
       mockUserRepositoryCreate.mockResolvedValue(USER_MOCK);
 
       await service.create(CREATE_USER_MOCK);
       expect(mockUserRepositoryFindOneByEmail).toHaveBeenCalledTimes(1);
+      expect(mockHashingServiceHash).toHaveBeenCalledTimes(1);
+      expect(mockHashingServiceHash).toHaveBeenCalledWith(PASSWORD_MOCK);
       expect(mockUserRepositoryCreate).toHaveBeenCalledTimes(1);
-      expect(mockSend).toHaveBeenCalledTimes(1);
+      expect(mockUserRepositoryCreate).toHaveBeenCalledWith({
+        ...CREATE_USER_MOCK,
+        password: PASSWORD_MOCK,
+      });
+    });
+
+    it('should throw an error if user already exists', async () => {
+      mockUserRepositoryFindOneByEmail.mockResolvedValue(USER_MOCK);
+
+      await expect(service.create(CREATE_USER_MOCK)).rejects.toThrow(
+        UserAlreadyExistsException,
+      );
+      expect(mockUserRepositoryFindOneByEmail).toHaveBeenCalledTimes(1);
+      expect(mockUserRepositoryCreate).toHaveBeenCalledTimes(0);
     });
   });
 
@@ -82,7 +83,9 @@ describe('UsersService', () => {
     it('should throw an error if user not found', async () => {
       mockUserRepositoryFindOneByActivationCode.mockResolvedValue(null);
 
-      await expect(service.confirmEmail('123')).rejects.toThrow();
+      await expect(service.confirmEmail('123')).rejects.toThrow(
+        UserNotFoundException,
+      );
       expect(mockUserRepositoryFindOneByActivationCode).toHaveBeenCalledTimes(
         1,
       );

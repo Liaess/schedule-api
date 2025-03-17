@@ -1,6 +1,6 @@
+import { CreateUserRequestDTO } from '@/users/dto';
+import { User } from '@/users/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDTO } from '@users/dto';
-import { User } from '@users/entity/user.entity';
 import { Repository } from 'typeorm';
 
 export class UsersRepository {
@@ -9,20 +9,25 @@ export class UsersRepository {
   ) {}
 
   async findOneByEmail(email: string): Promise<User> {
-    return this.repository.findOne({ where: { email } });
+    return await this.repository.findOne({
+      where: { email },
+    });
   }
 
-  async create(data: CreateUserDTO): Promise<User> {
-    return this.repository.save(data);
+  async create(data: CreateUserRequestDTO): Promise<User> {
+    return await this.repository.save({
+      ...data,
+      is_active: true,
+    });
   }
 
   async findOneByActivationCode(activationCode: string): Promise<User> {
-    return this.repository.findOne({
+    return await this.repository.findOne({
       where: { activation_code: activationCode },
     });
   }
 
   async activateUser(id: string): Promise<void> {
-    await this.repository.update(id, { isActive: true });
+    await this.repository.update(id, { is_active: true });
   }
 }
